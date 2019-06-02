@@ -1,4 +1,4 @@
-import kitten.stringbuilder;
+// import kitten.stringbuilder;
 
 
 struct Circular[T] {
@@ -129,17 +129,17 @@ function main() {
     printf("---\n");
     myCirc.mapSet(mult, 3);
     myCirc.mapGet(printInt);
-    printf("---\n");
-    var myCircStr: Circular[StringBuilder] = Circular.new(4);
-    myCircStr.set(StringBuilder.newFromString("hello world"));
-    myCircStr.set(StringBuilder.newFromString("foo bar"));
-    myCircStr.set(StringBuilder.newFromString("aaaaaaaaa"));
-    myCircStr.set(StringBuilder.newFromString("blah"));
-    myCircStr.mapGet(printSB);
-    printf("---\n");
-    myCircStr.mapSet(appendSB, StringBuilder.newFromString(". WHOA this is cool!"));
-    myCircStr.mapGet(printSB);
-    printf("---\n");
-    myCircStr.mapSet(appendSB, StringBuilder.newFromString(" It's a bit of a hack though because I can't mutate them in place."));
-    myCircStr.mapGet(printSB);
+    // printf("---\n");
+    // var myCircStr: Circular[StringBuilder] = Circular.new(4);
+    // myCircStr.set(StringBuilder.newFromString("hello world"));
+    // myCircStr.set(StringBuilder.newFromString("foo bar"));
+    // myCircStr.set(StringBuilder.newFromString("aaaaaaaaa"));
+    // myCircStr.set(StringBuilder.newFromString("blah"));
+    // myCircStr.mapGet(printSB);
+    // printf("---\n");
+    // myCircStr.mapSet(appendSB, StringBuilder.newFromString(". WHOA this is cool!"));
+    // myCircStr.mapGet(printSB);
+    // printf("---\n");
+    // myCircStr.mapSet(appendSB, StringBuilder.newFromString(" It's a bit of a hack though because I can't mutate them in place."));
+    // myCircStr.mapGet(printSB);
 }
