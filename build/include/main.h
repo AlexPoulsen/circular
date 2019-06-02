@@ -8,6 +8,7 @@
 #include "limits.h"
 #include "inttypes.h"
 struct circular_Circular__2a867e0193ff634180614473;
+struct circular_Circular__d97396f78a21e2b65e21df12;
 struct kit_common_Enum__box;
 struct kit_common_Enum__vtable;
 struct kit_common_Struct__box;
@@ -37,6 +38,14 @@ struct kitten_stringbuilder__StringBuilder;
 union kitten_xs_Rounding__EndianTest;
 struct circular_Circular__2a867e0193ff634180614473 {
     int * buffer;
+    int size;
+    int head;
+    int tail;
+    _Bool full;
+    int bufSize;
+};
+struct circular_Circular__d97396f78a21e2b65e21df12 {
+    struct kitten_stringbuilder__StringBuilder * buffer;
     int size;
     int head;
     int tail;
@@ -205,10 +214,31 @@ struct kit_vector_Vector__db51f4a3b554b90e9cb6c3c3 {
     size_t length;
     struct kit_slice_Slice__db51f4a3b554b90e9cb6c3c3 data;
 };
-void circular__printInt(int i);
-char * circular__repeatChar(char what, int times);
 int circular__mult(int a, int b);
+void circular__printSB(struct kitten_stringbuilder__StringBuilder s);
+void circular__printInt(int i);
+struct kitten_stringbuilder__StringBuilder circular__appendSB(struct kitten_stringbuilder__StringBuilder s,
+                                                              struct kitten_stringbuilder__StringBuilder append);
 int main();
+void circular_Circular_d97396f78a21e2b65e21df12__reset(struct circular_Circular__d97396f78a21e2b65e21df12 * __this);
+void circular_Circular_d97396f78a21e2b65e21df12__resetWipeBuffer(struct circular_Circular__d97396f78a21e2b65e21df12 * __this);
+struct kitten_stringbuilder__StringBuilder circular_Circular_d97396f78a21e2b65e21df12__get(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                                                           int offset);
+void circular_Circular_d97396f78a21e2b65e21df12__set(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                     struct kitten_stringbuilder__StringBuilder value,
+                                                     int offset);
+_Bool circular_Circular_d97396f78a21e2b65e21df12__isEmpty(struct circular_Circular__d97396f78a21e2b65e21df12 * __this);
+_Bool circular_Circular_d97396f78a21e2b65e21df12__isFull(struct circular_Circular__d97396f78a21e2b65e21df12 * __this);
+void circular_Circular_d97396f78a21e2b65e21df12__mapGet(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                        void (* fn)(struct kitten_stringbuilder__StringBuilder),
+                                                        int offset);
+void circular_Circular_d97396f78a21e2b65e21df12__mapSet(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                        struct kitten_stringbuilder__StringBuilder (* fn)(struct kitten_stringbuilder__StringBuilder,
+                                                                                                          struct kitten_stringbuilder__StringBuilder),
+                                                        struct kitten_stringbuilder__StringBuilder value,
+                                                        int offset);
+struct circular_Circular__2a867e0193ff634180614473 circular_Circular_2a867e0193ff634180614473__new(int size,
+                                                                                                   struct kit_mem_Allocator__box allocator);
 void circular_Circular_2a867e0193ff634180614473__reset(struct circular_Circular__2a867e0193ff634180614473 * __this);
 void circular_Circular_2a867e0193ff634180614473__resetWipeBuffer(struct circular_Circular__2a867e0193ff634180614473 * __this);
 int circular_Circular_2a867e0193ff634180614473__get(struct circular_Circular__2a867e0193ff634180614473 * __this,
@@ -225,7 +255,7 @@ void circular_Circular_2a867e0193ff634180614473__mapSet(struct circular_Circular
                                                         int (* fn)(int, int),
                                                         int value,
                                                         int offset);
-struct circular_Circular__2a867e0193ff634180614473 circular_Circular_2a867e0193ff634180614473__new(int size,
+struct circular_Circular__d97396f78a21e2b65e21df12 circular_Circular_d97396f78a21e2b65e21df12__new(int size,
                                                                                                    struct kit_mem_Allocator__box allocator);
 void kit_array_Array_245c01af2be1c62453ba052f__blit(struct kit_slice_Slice__245c01af2be1c62453ba052f * __this,
                                                     struct kit_slice_Slice__245c01af2be1c62453ba052f * other,

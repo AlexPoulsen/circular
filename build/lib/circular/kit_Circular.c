@@ -1,5 +1,86 @@
 #include "main.h"
 
+void circular_Circular_d97396f78a21e2b65e21df12__reset(struct circular_Circular__d97396f78a21e2b65e21df12 * __this)
+{
+    (*__this).head = (int) 0;
+    (*__this).tail = (int) 0;
+    (*__this).full = 0;
+}
+
+void circular_Circular_d97396f78a21e2b65e21df12__resetWipeBuffer(struct circular_Circular__d97396f78a21e2b65e21df12 * __this)
+{
+    (*__this).head = (int) 0;
+    (*__this).tail = (int) 0;
+    (*__this).full = 0;
+    memset((*__this).buffer, (int) 0, (*__this).bufSize);
+}
+
+struct kitten_stringbuilder__StringBuilder circular_Circular_d97396f78a21e2b65e21df12__get(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                                                           int offset)
+{
+    (*__this).tail++;
+    return (*__this).buffer[(offset + (*__this).tail - (int) 1) % (*__this).size];
+}
+
+void circular_Circular_d97396f78a21e2b65e21df12__set(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                     struct kitten_stringbuilder__StringBuilder value,
+                                                     int offset)
+{
+    (*__this).buffer[(offset + (*__this).head) % (*__this).size] = value;
+    (*__this).head++;
+    if ((*__this).head == (*__this).tail)
+    {
+        (*__this).full = 1;
+    }
+}
+
+_Bool circular_Circular_d97396f78a21e2b65e21df12__isEmpty(struct circular_Circular__d97396f78a21e2b65e21df12 * __this)
+{
+    return (*__this).head == (*__this).tail && !(*__this).full;
+}
+
+_Bool circular_Circular_d97396f78a21e2b65e21df12__isFull(struct circular_Circular__d97396f78a21e2b65e21df12 * __this)
+{
+    return (*__this).full;
+}
+
+void circular_Circular_d97396f78a21e2b65e21df12__mapGet(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                        void (* fn)(struct kitten_stringbuilder__StringBuilder),
+                                                        int offset)
+{
+    for (int n = (int) 0; n < (*__this).size; ++n)
+    {
+        fn(circular_Circular_d97396f78a21e2b65e21df12__get(__this,
+                                                           offset));
+    }
+}
+
+void circular_Circular_d97396f78a21e2b65e21df12__mapSet(struct circular_Circular__d97396f78a21e2b65e21df12 * __this,
+                                                        struct kitten_stringbuilder__StringBuilder (* fn)(struct kitten_stringbuilder__StringBuilder,
+                                                                                                          struct kitten_stringbuilder__StringBuilder),
+                                                        struct kitten_stringbuilder__StringBuilder value,
+                                                        int offset)
+{
+    for (int n = (int) 0; n < (*__this).size; ++n)
+    {
+        circular_Circular_d97396f78a21e2b65e21df12__set(__this,
+                                                        fn(circular_Circular_d97396f78a21e2b65e21df12__get(__this,
+                                                                                                           offset),
+                                                           value),
+                                                        offset);
+    }
+}
+
+struct circular_Circular__2a867e0193ff634180614473 circular_Circular_2a867e0193ff634180614473__new(int size,
+                                                                                                   struct kit_mem_Allocator__box allocator)
+{
+    int bufSize = size * sizeof(int);
+    int * buf = ((*allocator.__vtable).alloc)(allocator.__this,
+                                              bufSize);
+    memset(buf, (int) 0, bufSize);
+    return (struct circular_Circular__2a867e0193ff634180614473) {.buffer = buf, .size = size, .head = (int) 0, .tail = (int) 0, .full = 0, .bufSize = bufSize};
+}
+
 void circular_Circular_2a867e0193ff634180614473__reset(struct circular_Circular__2a867e0193ff634180614473 * __this)
 {
     (*__this).head = (int) 0;
@@ -70,12 +151,12 @@ void circular_Circular_2a867e0193ff634180614473__mapSet(struct circular_Circular
     }
 }
 
-struct circular_Circular__2a867e0193ff634180614473 circular_Circular_2a867e0193ff634180614473__new(int size,
+struct circular_Circular__d97396f78a21e2b65e21df12 circular_Circular_d97396f78a21e2b65e21df12__new(int size,
                                                                                                    struct kit_mem_Allocator__box allocator)
 {
-    int bufSize = size * sizeof(int);
-    int * buf = ((*allocator.__vtable).alloc)(allocator.__this,
-                                              bufSize);
+    int bufSize = size * sizeof(struct kitten_stringbuilder__StringBuilder);
+    struct kitten_stringbuilder__StringBuilder * buf = ((*allocator.__vtable).alloc)(allocator.__this,
+                                                                                     bufSize);
     memset(buf, (int) 0, bufSize);
-    return (struct circular_Circular__2a867e0193ff634180614473) {.buffer = buf, .size = size, .head = (int) 0, .tail = (int) 0, .full = 0, .bufSize = bufSize};
+    return (struct circular_Circular__d97396f78a21e2b65e21df12) {.buffer = buf, .size = size, .head = (int) 0, .tail = (int) 0, .full = 0, .bufSize = bufSize};
 }
