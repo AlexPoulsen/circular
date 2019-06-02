@@ -1,3 +1,6 @@
+import kitten.stringbuilder;
+
+
 struct Circular[T] {
     private var buffer: Ptr[T];
     private const size: Int = 10;
@@ -76,8 +79,19 @@ function printInt(i: Int) {
 }
 
 
+function printSB(s: StringBuilder) {
+    printf("%s\n", s.toString());
+}
+
+
 function mult(a: Int, b: Int) {
     return a * b;
+}
+
+
+function appendSB(s: StringBuilder, append: StringBuilder) {
+    // s.appendFromCopy(append);
+    return StringBuilder.newFromString(s.returnWithCopy(append));
 }
 
 
@@ -120,4 +134,16 @@ function main() {
     myCirc.mapSet(mult, 3);
     myCirc.mapGet(printInt);
     printf("---\n");
+    var myCircStr: Circular[StringBuilder] = Circular.new(4);
+    myCircStr.set(StringBuilder.newFromString("hello world"));
+    myCircStr.set(StringBuilder.newFromString("foo bar"));
+    myCircStr.set(StringBuilder.newFromString("aaaaaaaaa"));
+    myCircStr.set(StringBuilder.newFromString("blah"));
+    myCircStr.mapGet(printSB);
+    printf("---\n");
+    myCircStr.mapSet(appendSB, StringBuilder.newFromString(". WHOA this is cool!"));
+    myCircStr.mapGet(printSB);
+    printf("---\n");
+    myCircStr.mapSet(appendSB, StringBuilder.newFromString(" It's a bit of a hack though because I can't mutate them in place."));
+    myCircStr.mapGet(printSB);
 }
