@@ -1,38 +1,123 @@
 struct Circular[T] {
     private var buffer: Ptr[T];
-    private const size: Int;
+    private const size: Int = 10;
     private var head: Int;
     private var tail: Int;
     private var full: Bool;
+    private var bufSize: Int;
 
-    public static function new(size: Int): Circular[T] {
-        var buf: Ptr[T] = *(malloc(size * sizeof(T))): Ptr[T]
+    public static function new(size: Int, allocator: Box[Allocator] = mallocator): Circular[T] {
+        var bufSize: Int = size * sizeof(T);
+        var buf: Ptr[T] = *(allocator.alloc(bufSize)): Ptr[T];
+        memset(buf, 0, bufSize);
+        // buf = repeatChar(c'0', bufSize) as T;
+        // printf("<%d>\n", bufSize);
+        // printf("%s\n", repeatChar(c'0', bufSize));
         return struct Self {
-            buffer: buf;
+            buffer: buf,
             size,
             head: 0,
             tail: 0,
-            full: false
+            full: false,
+            bufSize
         };
     }
 
     public function reset(): Void {
+        this.head = 0;
+        this.tail = 0;
+        this.full = false;
+    }
 
+    public function resetWipeBuffer(): Void {
+        this.head = 0;
+        this.tail = 0;
+        this.full = false;
+        memset(this.buffer, 0, this.bufSize);
     }
 
     public function get(offset: Int = 0): T {
-
+        this.tail++;
+        return this.buffer[(offset + this.tail - 1) % this.size];
     }
 
     public function set(value: T, offset: Int = 0): Void {
-
+        this.buffer[(offset + this.head) % this.size] = value;
+        this.head++;
+        if this.head == this.tail {
+            this.full = true;
+        }
     }
 
-    public function isEmpty(): Void {
+    public function isEmpty(): Bool {
         return (this.head == this.tail) && !this.full;
     }
 
-    public function isFull(): Void {
-        return (this.head == this.tail) && this.full;
+    inline public function isFull(): Bool {
+        return this.full;
     }
+
+    public function mapGet(fn: function(T) -> Void, offset: Int = 0) {
+        for n in 0 ... this.size {
+            fn(this.get(offset));
+        }
+    }
+
+    public function mapSet(fn: function(T, T) -> T, value: T, offset: Int = 0) {
+        for n in 0 ... this.size {
+            this.set(fn(this.get(offset), value), offset);
+        }
+    }
+}
+
+
+function printInt(i: Int) {
+    printf("%d\n", i);
+}
+
+
+function mult(a: Int, b: Int) {
+    return a * b;
+}
+
+
+function main() {
+    var myCirc: Circular[Int] = Circular.new(10);
+    myCirc.mapGet(printInt);
+    printf("---\n");
+    myCirc.set(10);
+    myCirc.set(9);
+    myCirc.set(8);
+    myCirc.set(7);
+    myCirc.set(6);
+    myCirc.set(5);
+    myCirc.set(4);
+    myCirc.set(3);
+    myCirc.set(2);
+    myCirc.set(1);
+    // myCirc.set(11);
+    myCirc.mapGet(printInt);
+    printf("%s\n", if myCirc.isFull() then "full" else "empty");
+    printf("---\n");
+    myCirc.reset();
+    myCirc.mapGet(printInt);
+    printf("---\n");
+    myCirc.resetWipeBuffer();
+    myCirc.mapGet(printInt);
+    printf("---\n");
+    myCirc.set(10);
+    myCirc.set(9);
+    myCirc.set(8);
+    myCirc.set(7);
+    myCirc.set(6);
+    myCirc.set(5);
+    myCirc.set(4);
+    myCirc.set(3);
+    myCirc.set(2);
+    myCirc.set(1);
+    myCirc.mapGet(printInt);
+    printf("---\n");
+    myCirc.mapSet(mult, 3);
+    myCirc.mapGet(printInt);
+    printf("---\n");
 }
