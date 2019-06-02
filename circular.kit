@@ -1,0 +1,38 @@
+struct Circular[T] {
+    private var buffer: Ptr[T];
+    private const size: Int;
+    private var head: Int;
+    private var tail: Int;
+    private var full: Bool;
+
+    public static function new(size: Int): Circular[T] {
+        var buf: Ptr[T] = *(malloc(size * sizeof(T))): Ptr[T]
+        return struct Self {
+            buffer: buf;
+            size,
+            head: 0,
+            tail: 0,
+            full: false
+        };
+    }
+
+    public function reset(): Void {
+
+    }
+
+    public function get(offset: Int = 0): T {
+
+    }
+
+    public function set(value: T, offset: Int = 0): Void {
+
+    }
+
+    public function isEmpty(): Void {
+        return (this.head == this.tail) && !this.full;
+    }
+
+    public function isFull(): Void {
+        return (this.head == this.tail) && this.full;
+    }
+}
