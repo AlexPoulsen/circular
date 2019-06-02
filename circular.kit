@@ -11,11 +11,7 @@ struct Circular[T] {
 
     public static function new(size: Int, allocator: Box[Allocator] = mallocator): Circular[T] {
         var bufSize: Int = size * sizeof(T);
-        var buf: Ptr[T] = *(allocator.alloc(bufSize)): Ptr[T];
-        memset(buf, 0, bufSize);
-        // buf = repeatChar(c'0', bufSize) as T;
-        // printf("<%d>\n", bufSize);
-        // printf("%s\n", repeatChar(c'0', bufSize));
+        var buf: Ptr[T] = *(allocator.calloc(bufSize)): Ptr[T];
         return struct Self {
             buffer: buf,
             size,
