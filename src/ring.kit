@@ -72,19 +72,8 @@ function printInt(i: Int) {
 }
 
 
-function printSB(s: StringBuilder) {
-    printf("%s\n", s.toString());
-}
-
-
 function mult(a: Int, b: Int) {
     return a * b;
-}
-
-
-function appendSB(s: StringBuilder, append: StringBuilder) {
-    // s.appendFromCopy(append);
-    return StringBuilder.newFromString(s.returnWithCopy(append));
 }
 
 
