@@ -53,13 +53,13 @@ struct Ring[T] {
         return this.full;
     }
 
-    public function mapGet(fn: function(T) -> Void, offset: Int = 0) {
+    public function mapGet(fn: function(T) -> Void, offset: Int = 0): Void {
         for n in 0 ... this.size {
             fn(this.get(offset));
         }
     }
 
-    public function mapSet(fn: function(T, T) -> T, value: T, offset: Int = 0) {
+    public function mapSet(fn: function(T, T) -> T, value: T, offset: Int = 0): Void {
         for n in 0 ... this.size {
             this.set(fn(this.get(offset), value), offset);
         }
