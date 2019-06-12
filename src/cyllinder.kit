@@ -1,0 +1,99 @@
+struct Cyllinder[T] {
+    private var buffer: Ptr[Ptr[T]];
+    private const size: Int = 10;
+    private const width: Int = 10;
+    private var head: Int;
+    private var tail: Int;
+    private var full: Bool;
+    private var bufSize: Int;
+
+    public static function new(size: Int, width: Int, allocator: Box[Allocator] = mallocator): Cyllinder[T] {
+        var bufSize: Int = size * width * sizeof(T);
+        var buf: Ptr[Ptr[T]] = *(allocator.calloc(bufSize)): Ptr[Ptr[T]];
+        return struct Self {
+            buffer: buf,
+            size,
+            width,
+            head: 0,
+            tail: 0,
+            full: false,
+            bufSize
+        };
+    }
+
+    public function reset(): Void {
+        this.head = 0;
+        this.tail = 0;
+        this.full = false;
+    }
+
+    public function resetWipeBuffer(): Void {
+        this.head = 0;
+        this.tail = 0;
+        this.full = false;
+        memset(this.buffer, 0, this.bufSize);
+    }
+
+    public function getRow(offset: Int = 0): Ptr[T] {
+        this.tail++;
+        return this.buffer[(offset + this.tail - 1) % this.size];
+    }
+
+    public function setRow(value: Ptr[T], width: Int = -1, offset: Int = 0): Void {
+        if width == -1 {
+            width = this.width;
+        }
+        memcpy(this.buffer[(offset + this.head) % this.size], value, width);
+        this.head++;
+        if this.head == this.tail {
+            this.full = true;
+        }
+    }
+
+    public function isEmpty(): Bool {
+        return (this.head == this.tail) && !this.full;
+    }
+
+    inline public function isFull(): Bool {
+        return this.full;
+    }
+
+    public function mapGetRow(fn: function(Ptr[T], Int) -> Void, width: Int = -1, offset: Int = 0): Void {
+        if width == -1 {
+            width = this.width;
+        }
+        for n in 0 ... this.size {
+            fn(this.getRow(offset), width);
+        }
+    }
+
+    public function mapSetRow(fn: function(Ptr[T], T, Int) -> T, value: T, width: Int = -1, offset: Int = 0): Void {
+        if width == -1 {
+            width = this.width;
+        }
+        for n in 0 ... this.size {
+            this.setRow(fn(this.getRow(offset), value, width), offset);
+        }
+    }
+}
+
+
+function printStr(s: Ptr[Char]) {
+    printf("%s\n", s);
+}
+
+
+function main() {
+    var myCyll: Cyllinder[Char] = Cyllinder.new(10, 10);
+    myCyll.setRow("abcdefghij");
+    myCyll.setRow("bcdefghijk");
+    myCyll.setRow("cdefghijkl");
+    myCyll.setRow("defghijklm");
+    myCyll.setRow("efghijklmn");
+    myCyll.setRow("fghijklmno");
+    myCyll.setRow("ghijklmnop");
+    myCyll.setRow("hijklmnopq");
+    myCyll.setRow("ijklmnopqr");
+    myCyll.setRow("jklmnopqrs");
+    myCyll.mapGetRow(printStr);
+}

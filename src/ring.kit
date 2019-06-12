@@ -45,6 +45,25 @@ struct Ring[T] {
         }
     }
 
+    public function getNoSeek(offset: Int = 0): T {
+        return this.buffer[(offset + this.tail) % this.size];
+    }
+
+    public function setNoSeek(value: T, offset: Int = 0): Void {
+        this.buffer[(offset + this.head) % this.size] = value;
+    }
+
+    inline public function seekGet(offset: Int = 1): Void {
+        this.tail += offset;
+    }
+
+    public function seekSet(offset: Int = 1): Void {
+        this.head += offset;
+        if this.head == this.tail {
+            this.full = true;
+        }
+    }
+
     public function isEmpty(): Bool {
         return (this.head == this.tail) && !this.full;
     }
@@ -62,6 +81,18 @@ struct Ring[T] {
     public function mapSet(fn: function(T, T) -> T, value: T, offset: Int = 0): Void {
         for n in 0 ... this.size {
             this.set(fn(this.get(offset), value), offset);
+        }
+    }
+
+    public function mapGetNoSeek(fn: function(T) -> Void, offset: Int = 0): Void {
+        for n in 0 ... this.size {
+            fn(this.getNoSeek(offset));
+        }
+    }
+
+    public function mapSetNoSeek(fn: function(T, T) -> T, value: T, offset: Int = 0): Void {
+        for n in 0 ... this.size {
+            this.setNoSeek(fn(this.getNoSeek(offset), value), offset);
         }
     }
 }
