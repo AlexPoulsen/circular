@@ -1,7 +1,4 @@
-// import kitten.stringbuilder;
-
-
-struct Circular[T] {
+struct Ring[T] {
     private var buffer: Ptr[T];
     private const size: Int = 10;
     private var head: Int;
@@ -9,7 +6,7 @@ struct Circular[T] {
     private var full: Bool;
     private var bufSize: Int;
 
-    public static function new(size: Int, allocator: Box[Allocator] = mallocator): Circular[T] {
+    public static function new(size: Int, allocator: Box[Allocator] = mallocator): Ring[T] {
         var bufSize: Int = size * sizeof(T);
         var buf: Ptr[T] = *(allocator.calloc(bufSize)): Ptr[T];
         return struct Self {
@@ -92,7 +89,7 @@ function appendSB(s: StringBuilder, append: StringBuilder) {
 
 
 function main() {
-    var myCirc: Circular[Int] = Circular.new(10);
+    var myCirc: Ring[Int] = Ring.new(10);
     myCirc.mapGet(printInt);
     printf("---\n");
     myCirc.set(10);
@@ -129,17 +126,4 @@ function main() {
     printf("---\n");
     myCirc.mapSet(mult, 3);
     myCirc.mapGet(printInt);
-    // printf("---\n");
-    // var myCircStr: Circular[StringBuilder] = Circular.new(4);
-    // myCircStr.set(StringBuilder.newFromString("hello world"));
-    // myCircStr.set(StringBuilder.newFromString("foo bar"));
-    // myCircStr.set(StringBuilder.newFromString("aaaaaaaaa"));
-    // myCircStr.set(StringBuilder.newFromString("blah"));
-    // myCircStr.mapGet(printSB);
-    // printf("---\n");
-    // myCircStr.mapSet(appendSB, StringBuilder.newFromString(". WHOA this is cool!"));
-    // myCircStr.mapGet(printSB);
-    // printf("---\n");
-    // myCircStr.mapSet(appendSB, StringBuilder.newFromString(" It's a bit of a hack though because I can't mutate them in place."));
-    // myCircStr.mapGet(printSB);
 }
